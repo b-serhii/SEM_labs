@@ -1,88 +1,65 @@
 function simulate() {
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const x0 = parseFloat(document.getElementById('x0').value);
+    const y0 = parseFloat(document.getElementById('y0').value);
+    const angle = parseFloat(document.getElementById('angle').value) * Math.PI / 180;
+    const velocity = parseFloat(document.getElementById('velocity').value);
+    const acceleration = parseFloat(document.getElementById('acceleration').value);
+    const color = document.getElementById('color').value;
     
-    let x0 = parseFloat(document.getElementById('x0').value);
-    let y0 = parseFloat(document.getElementById('y0').value);
-    let angle = parseFloat(document.getElementById('angle').value) * Math.PI / 180;
-    let velocity = parseFloat(document.getElementById('velocity').value);
-    let acceleration = parseFloat(document.getElementById('acceleration').value);
-    let color = document.getElementById('color').value;
+    const width = 700, height = 500;
+    d3.select("#graph").selectAll("svg").remove();
+    const svg = d3.select("#graph").append("svg")
+        .attr("width", width)
+        .attr("height", height);
     
-    let x = x0;
-    let y = y0;
-    let vx = velocity * Math.cos(angle);
-    let vy = velocity * Math.sin(angle);
-    let t = 0;
-    let dt = 0.1;
+    const xScale = d3.scaleLinear().domain([0, width]).range([50, width - 50]);
+    const yScale = d3.scaleLinear().domain([0, height]).range([height - 50, 50]);
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawGrid(ctx, canvas.width, canvas.height);
-    drawAxes(ctx, canvas.width, canvas.height);
+    const xAxis = d3.axisBottom(xScale).ticks(10);
+    const yAxis = d3.axisLeft(yScale).ticks(10);
     
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(50, canvas.height - 50);
+    svg.append("g").attr("transform", `translate(0,${height - 50})`).call(xAxis);
+    svg.append("g").attr("transform", `translate(50,0)`).call(yAxis);
     
-    while (x < canvas.width && y >= 0) {
-        t += dt;
-        x = x0 + vx * t;
-        y = y0 + vy * t + 0.5 * acceleration * t * t;
-        ctx.lineTo(50 + x, canvas.height - 50 - y);
-    }
+    svg.append("text")
+        .attr("x", width - 40)
+        .attr("y", height - 30)
+        .attr("fill", "black")
+        .style("font-size", "14px")
+        .text("X, м");
     
-    ctx.stroke();
+    svg.append("text")
+        .attr("x", 10)
+        .attr("y", 20)
+        .attr("fill", "black")
+        .style("font-size", "14px")
+        .text("Y, м");
+    
+    //Сітка
+    const gridLinesX = svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0,${height - 50})`)
+        .call(d3.axisBottom(xScale).tickSize(-height + 100).tickFormat(""));
+    
+    const gridLinesY = svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(50,0)")
+        .call(d3.axisLeft(yScale).tickSize(-width + 100).tickFormat(""));
+    
+    let x1 = x0;
+    let y1 = y0;
+    let x2 = x0 + 500 * Math.cos(angle);
+    let y2 = y0 + 500 * Math.sin(angle);
+    
+    svg.append("line")
+        .attr("x1", xScale(x1))
+        .attr("y1", yScale(y1))
+        .attr("x2", xScale(x2))
+        .attr("y2", yScale(y2))
+        .attr("stroke", color)
+        .attr("stroke-width", 2);
 }
 
-function clearCanvas() {
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawGrid(ctx, canvas.width, canvas.height);
-    drawAxes(ctx, canvas.width, canvas.height);
-    
-    document.getElementById("x0").value = "0";
-    document.getElementById("y0").value = "0";
-    document.getElementById("angle").value = "0";
-    document.getElementById("velocity").value = "0";
-    document.getElementById("acceleration").value = "0";
-}
-
-function drawGrid(ctx, width, height) {
-    ctx.strokeStyle = "lightgray";
-    ctx.lineWidth = 0.5;
-    
-    for (let x = 50; x <= width; x += 50) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-    }
-    
-    for (let y = height - 50; y >= 0; y -= 50) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-    }
-}
-
-function drawAxes(ctx, width, height) {
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    
-    // Ось X
-    ctx.beginPath();
-    ctx.moveTo(50, height - 50);
-    ctx.lineTo(width, height - 50);
-    ctx.stroke();
-    ctx.fillText("X, м", width - 30, height - 30);
-    
-    // Ось Y
-    ctx.beginPath();
-    ctx.moveTo(50, 0);
-    ctx.lineTo(50, height - 50);
-    ctx.stroke();
-    ctx.fillText("Y, м", 10, 20);
+function clearGraph() {
+    d3.select("#graph").selectAll("svg").remove();
 }

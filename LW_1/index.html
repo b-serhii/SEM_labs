@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кінематика руху</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Моделювання прямолінійного руху</h1>
-    <div class="controls">
-        <label>x₀ (м): <input type="number" id="x0" value="0"></label>
-        <label>y₀ (м): <input type="number" id="y0" value="0"></label>
-        <label>Кут (°): <input type="number" id="angle" value="0"></label>
-        <label>Швидкість (м/с): <input type="number" id="velocity" value="0"></label>
-        <label>Прискорення (м/с²): <input type="number" id="acceleration" value="0"></label>
-        <label>Колір траєкторії: <input type="color" id="color" value="#ff0000"></label>
-        <button onclick="simulate()">Графік</button>
-        <button onclick="clearCanvas()">Очистити</button>
-    </div>
-    <canvas id="canvas" width="600" height="400"></canvas>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Кінематика руху</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <h1>Моделювання прямолінійного руху</h1>
+        <div class="controls">
+            <label>x₀ (м): <input type="number" id="x0" value="0"></label>
+            <label>y₀ (м): <input type="number" id="y0" value="0"></label>
+            <label>Кут (Градуси): <input type="number" id="angle" value="0"></label>
+            <label>Швидкість (м/с): <input type="number" id="velocity" value="0"></label>
+            <label>Прискорення (м/с²): <input type="number" id="acceleration" value="0"></label>
+            <label>Колір траєкторії: <input type="color" id="color" value="#ff0000"></label>
+            <button onclick="simulate()">Графік</button>
+            <button onclick="clearGraph()">Очистити</button>
+        </div>
+        <div id="graph"></div>
+    </body>
     <script src="main.js"></script>
 </body>
 </html>
