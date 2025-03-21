@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Кидання тіла під кутом</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <h1>Візуалізація траєкторії польоту</h1>
+
+  <section class="main-container">
+    <svg id="canvas" width="800" height="400"></svg>
+
+    <aside class="controls">
+      <div class="input-block">
+        <label>Початкова швидкість (м/с): <input type="number" id="velocity" value="0" /></label>
+        <label>Кут (Градуси): <input type="number" id="angle" value="0" /></label>
+        <label>Прискорення вільного падіння g (м/с²): <input type="number" id="gravity" value="0" step="0.1" /></label>
+        <label>Колір лінії: <input type="color" id="colorPicker"/></label>
+        <button id="drawBtn">Показати</button>
+      </div>
+
+      <div class="output-block hidden" id="results">
+        <p id="timeOutput"></p>
+        <p id="rangeOutput"></p>
+        <p id="heightOutput"></p>
+      </div>
+    </aside>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>
